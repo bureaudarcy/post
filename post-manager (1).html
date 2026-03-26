@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Post Manager</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f5f3ee;--surface:#fff;--b:rgba(0,0,0,0.09);--bmd:rgba(0,0,0,0.18);
+  --text:#1a1a18;--muted:#6b6b66;--acc:#b83225;--acc-bg:#fdf0ef;
+  --green:#1e6b3a;--green-bg:#edf7f1;
+  --amber:#7a5000;--amber-bg:#fdf4e3;
+  --blue:#14487a;--blue-bg:#e8f1fa;
+  --purple:#4e1fa8;--purple-bg:#f0eeff;
+  --mono:'DM Mono',monospace;--sans:'DM Sans',sans-serif;
+}
+body{font-family:var(--mono);background:var(--bg);color:var(--text);min-height:100vh;font-size:13px;line-height:1.5}
+#app{display:flex;flex-direction:column;height:100vh;overflow:hidden}
+header{background:var(--surface);border-bottom:1px solid var(--b);padding:.7rem 1.25rem;display:flex;align-items:center;gap:.75rem;flex-shrink:0;z-index:10}
+.logo{font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--acc)}
+.spacer{flex:1}
+.main{display:grid;grid-template-columns:290px 1fr;flex:1;overflow:hidden}
+.sidebar{background:var(--surface);border-right:1px solid var(--b);display:flex;flex-direction:column;overflow:hidden}
+.sb-top{padding:.9rem 1rem;border-bottom:1px solid var(--b);flex-shrink:0}
+.letter-list{flex:1;overflow-y:auto;padding:.4rem}
+.content{overflow-y:auto;background:var(--bg);padding:1.25rem}
+
+.btn{display:inline-flex;align-items:center;gap:5px;padding:6px 13px;border-radius:7px;font-family:var(--mono);font-size:11px;cursor:pointer;border:1px solid var(--bmd);background:var(--surface);color:var(--text);transition:background .12s;white-space:nowrap}
+.btn:hover{background:var(--bg)}
+.btn-primary{background:var(--acc);color:#fff;border-color:var(--acc)}
+.btn-primary:hover{background:#9e2b21}
+.btn:disabled{opacity:.35;pointer-events:none}
+
+/* auth */
+#authScreen{flex:1;display:flex;align-items:center;justify-content:center;padding:2rem}
+.auth-card{background:var(--surface);border:1px solid var(--b);border-radius:16px;padding:2.5rem 2rem;width:400px;text-align:center}
+.auth-icon{width:52px;height:52px;background:var(--acc-bg);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1.25rem}
+.auth-title{font-family:var(--sans);font-size:20px;font-weight:500;margin-bottom:.4rem}
+.auth-sub{font-family:var(--sans);font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:1.5rem}
+.scope-list{background:var(--bg);border-radius:8px;padding:.75rem 1rem;margin-bottom:1.25rem;text-align:left}
+.scope-item{display:flex;align-items:flex-start;gap:8px;padding:5px 0;font-size:11px;color:var(--muted);border-bottom:1px solid var(--b)}
+.scope-item:last-child{border:none;padding-bottom:0}
+.scope-icon{color:var(--green);font-size:11px;margin-top:1px;flex-shrink:0}
+
+/* company tabs */
+.ctabs{display:flex;gap:3px;background:var(--bg);padding:3px;border-radius:8px;border:1px solid var(--b)}
+.ctab{padding:4px 10px;border:none;background:transparent;border-radius:5px;font-family:var(--mono);font-size:10px;color:var(--muted);cursor:pointer;transition:all .12s;letter-spacing:.04em}
+.ctab.on{background:var(--surface);color:var(--text);font-weight:500;box-shadow:0 1px 3px rgba(0,0,0,.07)}
+
+/* status pills */
+.spills{display:flex;flex-wrap:wrap;gap:4px}
+.sp{padding:3px 8px;border-radius:20px;font-family:var(--sans);font-size:10px;font-weight:500;cursor:pointer;border:1px solid transparent;transition:box-shadow .12s}
+.sp.on{box-shadow:0 0 0 1.5px currentColor}
+.sp-all{background:var(--bg);color:var(--muted);border-color:var(--bmd)}
+.sp-taxman{background:var(--purple-bg);color:var(--purple)}
+.sp-info{background:var(--amber-bg);color:var(--amber)}
+.sp-payment{background:var(--blue-bg);color:var(--blue)}
+.sp-paid{background:var(--green-bg);color:var(--green)}
+.sp-filed{background:#f1f0ee;color:var(--muted)}
+
+/* letter cards */
+.lcard{padding:.65rem .85rem;border-radius:8px;cursor:pointer;border:1px solid transparent;margin-bottom:2px;transition:background .1s}
+.lcard:hover{background:var(--bg)}
+.lcard.on{background:var(--acc-bg);border-color:rgba(184,50,37,.18)}
+.lc-row{display:flex;justify-content:space-between;gap:6px;margin-bottom:2px}
+.lc-sender{font-family:var(--sans);font-size:12px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lc-date{font-size:10px;color:var(--muted);flex-shrink:0}
+.lc-subj{font-family:var(--sans);font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:4px}
+.lc-badges{display:flex;gap:4px;align-items:center}
+.badge{display:inline-block;padding:2px 6px;border-radius:10px;font-family:var(--sans);font-size:10px;font-weight:500}
+
+/* detail */
+.detail{max-width:660px}
+.d-header{background:var(--surface);border:1px solid var(--b);border-radius:12px;padding:1.1rem 1.25rem;margin-bottom:.75rem}
+.d-co{font-size:9px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:3px}
+.d-subject{font-family:var(--sans);font-size:17px;font-weight:500;margin-bottom:.7rem}
+.d-chips{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.chip{display:flex;align-items:center;gap:4px;font-family:var(--sans);font-size:11px;color:var(--muted);background:var(--bg);padding:3px 8px;border-radius:6px;border:1px solid var(--b)}
+.fname{font-size:10px;color:var(--muted);background:#ede8e1;border-radius:5px;padding:4px 8px;margin-top:.6rem;word-break:break-all;font-family:var(--mono)}
+.d-grid{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:.75rem}
+.dcard{background:var(--surface);border:1px solid var(--b);border-radius:10px;padding:.9rem 1rem}
+.dcard-label{font-size:9px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.3rem}
+.dcard-val{font-family:var(--sans);font-size:13px;color:var(--text);line-height:1.55}
+.action-box{background:var(--acc-bg);border:1px solid rgba(184,50,37,.2);border-radius:10px;padding:.9rem 1rem;margin-bottom:.75rem}
+.action-label{font-size:9px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--acc);margin-bottom:.3rem}
+.action-text{font-family:var(--sans);font-size:13px;color:var(--text);line-height:1.5}
+.scard{background:var(--surface);border:1px solid var(--b);border-radius:10px;padding:.9rem 1rem;margin-bottom:.75rem}
+.sec-label{font-size:9px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.6rem}
+.sbtn-row{display:flex;flex-wrap:wrap;gap:6px}
+.sbtn{padding:5px 12px;border-radius:20px;font-family:var(--sans);font-size:11px;font-weight:500;cursor:pointer;border:1.5px solid transparent;transition:box-shadow .12s}
+.sbtn.on{box-shadow:0 0 0 2px currentColor}
+.related-item{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--b);cursor:pointer}
+.related-item:last-child{border:none}
+.ri-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.ri-info{flex:1;min-width:0}
+.ri-name{font-family:var(--sans);font-size:12px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ri-meta{font-size:10px;color:var(--muted)}
+
+/* empty state */
+.empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;color:var(--muted);text-align:center;padding:2rem}
+.empty-title{font-family:var(--sans);font-size:15px;font-weight:500;color:var(--text);opacity:.45;margin-bottom:.4rem}
+.empty-sub{font-family:var(--sans);font-size:12px;opacity:.55;max-width:240px;line-height:1.55}
+
+/* overlay */
+#overlay{position:fixed;inset:0;background:rgba(245,243,238,.93);display:none;align-items:center;justify-content:center;z-index:100;backdrop-filter:blur(3px)}
+#overlay.show{display:flex}
+.ov-card{background:var(--surface);border:1px solid var(--b);border-radius:14px;padding:2rem;width:320px;text-align:center}
+.spinner{width:32px;height:32px;border:2.5px solid var(--b);border-top-color:var(--acc);border-radius:50%;animation:spin .65s linear infinite;margin:0 auto 1rem}
+@keyframes spin{to{transform:rotate(360deg)}}
+.ov-title{font-family:var(--sans);font-size:14px;font-weight:500;margin-bottom:.4rem}
+.ov-step{font-size:11px;color:var(--muted);line-height:1.7;min-height:2.5rem}
+
+/* ── TRIAGE MODAL ── */
+#triageModal{position:fixed;inset:0;background:rgba(26,26,24,.45);display:none;align-items:center;justify-content:center;z-index:150;backdrop-filter:blur(2px)}
+#triageModal.show{display:flex}
+.triage-card{background:var(--surface);border:1px solid var(--b);border-radius:16px;width:520px;max-height:88vh;overflow-y:auto;box-shadow:0 8px 40px rgba(0,0,0,.12)}
+.triage-header{padding:1.1rem 1.25rem;border-bottom:1px solid var(--b);display:flex;align-items:center;justify-content:space-between}
+.triage-title{font-family:var(--sans);font-size:15px;font-weight:500}
+.triage-sub{font-size:10px;color:var(--muted);margin-top:1px}
+.triage-close{background:none;border:none;cursor:pointer;color:var(--muted);font-size:18px;line-height:1;padding:2px 6px}
+.triage-body{padding:1rem 1.25rem}
+.triage-file{background:var(--bg);border:1px solid var(--b);border-radius:10px;padding:.85rem 1rem;margin-bottom:.6rem;display:flex;align-items:flex-start;gap:.75rem}
+.tf-thumb{width:44px;height:52px;background:#ede8e1;border-radius:5px;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden}
+.tf-thumb img{width:100%;height:100%;object-fit:cover}
+.tf-thumb-icon{opacity:.3}
+.tf-info{flex:1;min-width:0}
+.tf-name{font-family:var(--sans);font-size:12px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:.4rem}
+.tf-status-row{display:flex;flex-wrap:wrap;gap:5px}
+.tf-sbtn{padding:3px 9px;border-radius:14px;font-family:var(--sans);font-size:10px;font-weight:500;cursor:pointer;border:1.5px solid transparent;transition:box-shadow .1s;white-space:nowrap}
+.tf-sbtn.on{box-shadow:0 0 0 2px currentColor}
+.triage-note{font-family:var(--sans);font-size:11px;color:var(--muted);margin-bottom:1rem;padding:.6rem .75rem;background:var(--blue-bg);border-radius:7px;border:1px solid rgba(20,72,122,.15);line-height:1.5}
+.triage-footer{padding:.9rem 1.25rem;border-top:1px solid var(--b);display:flex;justify-content:flex-end;gap:.5rem}
+
+/* toast */
+#toast{position:fixed;bottom:1.25rem;right:1.25rem;background:var(--text);color:#fff;padding:.6rem 1rem;border-radius:8px;font-family:var(--sans);font-size:12px;z-index:200;opacity:0;transform:translateY(6px);transition:all .2s;max-width:280px;pointer-events:none}
+#toast.show{opacity:1;transform:translateY(0)}
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- AUTH -->
+  <div id="authScreen">
+    <div class="auth-card">
+      <div class="auth-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#b83225" stroke-width="1.8">
+          <path d="M4 4h16v16H4z"/><path d="M4 9h16M9 9v11"/>
+        </svg>
+      </div>
+      <div class="auth-title">Post Manager</div>
+      <div class="auth-sub">Connects to Google Drive to file, rename, and track post for Open House UG, Sincerely UG, and Bureau Darcy UG.</div>
+      <div class="scope-list">
+        <div class="scope-item"><span class="scope-icon">✓</span><span>Read and list files in your Drive (inbox folder only)</span></div>
+        <div class="scope-item"><span class="scope-icon">✓</span><span>Create folders and Google Docs for filing</span></div>
+        <div class="scope-item"><span class="scope-icon">✓</span><span>Rename files and move them to correct folders</span></div>
+        <div class="scope-item"><span class="scope-icon">✓</span><span>No other data accessed or stored externally</span></div>
+      </div>
+      <div style="background:var(--amber-bg);border:1px solid rgba(122,80,0,.2);border-radius:8px;padding:.7rem .9rem;margin-bottom:1.1rem;text-align:left">
+        <div style="font-size:10px;font-weight:500;color:var(--amber);margin-bottom:2px;letter-spacing:.05em;text-transform:uppercase">One-time setup needed</div>
+        <div style="font-family:var(--sans);font-size:11px;color:var(--amber);line-height:1.5">Set <code>CLIENT_ID</code> in the HTML to your Google OAuth 2.0 Client ID before hosting. See Google Cloud Console → Credentials.</div>
+      </div>
+      <button class="btn btn-primary" style="width:100%;justify-content:center;font-size:13px;padding:10px" onclick="startAuth()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M10 14L21 3M9 3H3v18h18v-6"/></svg>
+        Connect Google Drive
+      </button>
+      <div style="margin-top:.7rem;font-size:10px;color:var(--muted)">Redirects to Google OAuth — one-time authorisation</div>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div id="mainApp" style="display:none;flex-direction:column;flex:1;overflow:hidden">
+    <header>
+      <div class="logo">Post Manager</div>
+      <div class="ctabs">
+        <button class="ctab on" onclick="setCompany('ALL',this)">All</button>
+        <button class="ctab" onclick="setCompany('OH',this)">OH</button>
+        <button class="ctab" onclick="setCompany('SIN',this)">SIN</button>
+        <button class="ctab" onclick="setCompany('BD',this)">BD</button>
+      </div>
+      <div class="spacer"></div>
+      <button class="btn" onclick="openInbox()">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.51"/></svg>
+        Process Inbox
+      </button>
+      <button class="btn btn-primary" onclick="runSetup()">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+        Drive Setup
+      </button>
+    </header>
+
+    <div class="main">
+      <div class="sidebar">
+        <div class="sb-top">
+          <div style="font-size:9px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem">Status</div>
+          <div class="spills">
+            <div class="sp sp-all on" onclick="filterStatus('ALL',this)">All</div>
+            <div class="sp sp-taxman" onclick="filterStatus('TAXMAN',this)">Tax Man</div>
+            <div class="sp sp-info" onclick="filterStatus('AWAITINFO',this)">Awaiting Info</div>
+            <div class="sp sp-payment" onclick="filterStatus('AWAITPAY',this)">Awaiting Payment</div>
+            <div class="sp sp-paid" onclick="filterStatus('PAID',this)">Paid</div>
+            <div class="sp sp-filed" onclick="filterStatus('FILED',this)">Filed</div>
+          </div>
+        </div>
+        <div class="letter-list" id="letterList">
+          <div style="padding:1.25rem;text-align:center;font-family:var(--sans);font-size:12px;color:var(--muted)">No letters yet</div>
+        </div>
+      </div>
+
+      <div class="content" id="content">
+        <div class="empty">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.1" style="opacity:.2;margin-bottom:.75rem">
+            <path d="M4 4h16v16H4z"/><path d="M4 9h16M9 9v11"/>
+          </svg>
+          <div class="empty-title">No letter selected</div>
+          <div class="empty-sub">Click "Process Inbox" to read and file your post</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TRIAGE MODAL -->
+<div id="triageModal">
+  <div class="triage-card">
+    <div class="triage-header">
+      <div>
+        <div class="triage-title">Triage Inbox</div>
+        <div class="triage-sub">Set status before processing — AI will still extract all details</div>
+      </div>
+      <button class="triage-close" onclick="closeTriage()">✕</button>
+    </div>
+    <div class="triage-body">
+      <div class="triage-note">
+        Leave as <strong>Auto</strong> to let the AI decide the status. Or override for anything you've already dealt with — e.g. mark as Paid before filing.
+      </div>
+      <div id="triageFiles"></div>
+    </div>
+    <div class="triage-footer">
+      <button class="btn" onclick="closeTriage()">Cancel</button>
+      <button class="btn btn-primary" onclick="confirmTriage()">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+        Process All
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- PROCESSING OVERLAY -->
+<div id="overlay">
+  <div class="ov-card">
+    <div class="spinner"></div>
+    <div class="ov-title" id="ovTitle">Working…</div>
+    <div class="ov-step" id="ovStep"></div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+// ── CONFIG ─────────────────────────────────────────────────────────
+const CLIENT_ID    = 'YOUR_GOOGLE_OAUTH_CLIENT_ID'; // ← replace before hosting
+const REDIRECT_URI = window.location.href.split('?')[0].split('#')[0];
+const SCOPES       = 'https://www.googleapis.com/auth/drive';
+const ROOT_NAME    = 'Post Manager';
+const INBOX_NAME   = 'Post Inbox';
+
+const COMPANIES = { OH:'Open House UG', SIN:'Sincerely UG', BD:'Bureau Darcy UG' };
+const CATS = ['Invoices & Finance','Legal & Contracts','Tax & Steuerberater','General Correspondence','Action Required'];
+
+const S = {
+  AUTO:     {label:'Auto',             cls:'sp-filed',   color:'#6b6b66', bg:'#f1f0ee'},
+  TAXMAN:   {label:'Send to Tax Man',  cls:'sp-taxman',  color:'#4e1fa8', bg:'#f0eeff'},
+  AWAITINFO:{label:'Awaiting Info',    cls:'sp-info',    color:'#7a5000', bg:'#fdf4e3'},
+  AWAITPAY: {label:'Awaiting Payment', cls:'sp-payment', color:'#14487a', bg:'#e8f1fa'},
+  PAID:     {label:'Paid',             cls:'sp-paid',    color:'#1e6b3a', bg:'#edf7f1'},
+  FILED:    {label:'Filed',            cls:'sp-filed',   color:'#6b6b66', bg:'#f1f0ee'},
+};
+// Statuses shown in the main list (no AUTO)
+const S_MAIN = Object.fromEntries(Object.entries(S).filter(([k])=>k!=='AUTO'));
+
+// ── STATE ──────────────────────────────────────────────────────────
+let token=null, letters=[], fids={}, driveReady=false;
+let activeCo='ALL', activeSt='ALL', activeId=null;
+let triageQueue=[]; // [{file, manualStatus}]
+
+// ── AUTH ───────────────────────────────────────────────────────────
+function startAuth(){
+  const p=new URLSearchParams({client_id:CLIENT_ID,redirect_uri:REDIRECT_URI,response_type:'token',scope:SCOPES,prompt:'consent'});
+  window.location.href='https://accounts.google.com/o/oauth2/v2/auth?'+p;
+}
+function checkAuth(){
+  const hash=new URLSearchParams(window.location.hash.replace('#',''));
+  const t=hash.get('access_token');
+  if(t){token=t;sessionStorage.setItem('pm_tok',t);history.replaceState(null,'',REDIRECT_URI);showMain();return;}
+  const s=sessionStorage.getItem('pm_tok');
+  if(s){token=s;showMain();}
+}
+function showMain(){
+  document.getElementById('authScreen').style.display='none';
+  document.getElementById('mainApp').style.display='flex';
+  checkDriveReady();
+}
+
+// ── DRIVE API ──────────────────────────────────────────────────────
+async function api(path,opts={}){
+  const r=await fetch('https://www.googleapis.com/drive/v3'+path,{
+    ...opts,
+    headers:{'Authorization':'Bearer '+token,'Content-Type':'application/json',...(opts.headers||{})}
+  });
+  if(r.status===401){sessionStorage.clear();location.reload();}
+  if(!r.ok){const e=await r.json().catch(()=>({}));throw new Error(e.error?.message||r.status);}
+  if(r.status===204)return{};
+  return r.json();
+}
+async function mkFolder(name,parentId){
+  const q=encodeURIComponent(`name='${name}' and '${parentId}' in parents and mimeType='application/vnd.google-apps.folder' and trashed=false`);
+  const ex=await api(`/files?q=${q}&fields=files(id)`);
+  if(ex.files.length)return ex.files[0].id;
+  const r=await api('/files',{method:'POST',body:JSON.stringify({name,mimeType:'application/vnd.google-apps.folder',parents:[parentId]})});
+  return r.id;
+}
+async function getRoot(){
+  const q=encodeURIComponent(`name='${ROOT_NAME}' and mimeType='application/vnd.google-apps.folder' and trashed=false and 'root' in parents`);
+  const r=await api(`/files?q=${q}&fields=files(id)`);
+  return r.files[0]?.id||null;
+}
+
+// ── SETUP ──────────────────────────────────────────────────────────
+async function checkDriveReady(){
+  try{const rootId=await getRoot();if(rootId){await loadFids(rootId);driveReady=true;}}catch(e){}
+}
+async function runSetup(){
+  setOv(true,'Setting up Drive','Creating folder structure…');
+  try{
+    const rootId=await mkFolder(ROOT_NAME,'root');
+    fids.root=rootId;
+    step('Creating Post Inbox…');
+    fids.inbox=await mkFolder(INBOX_NAME,rootId);
+    for(const co of ['OH','SIN','BD']){
+      step('Creating '+COMPANIES[co]+'…');
+      const coId=await mkFolder(COMPANIES[co],rootId);
+      fids[co]=coId;
+      for(const cat of CATS)fids[`${co}/${cat}`]=await mkFolder(cat,coId);
+    }
+    driveReady=true;setOv(false);
+    toast('✓ Drive ready. Drop scans into "Post Inbox" to begin.');
+  }catch(e){setOv(false);toast('Setup error: '+e.message);}
+}
+async function loadFids(rootId){
+  fids.root=rootId;
+  const r=await api(`/files?q=${encodeURIComponent(`'${rootId}' in parents and mimeType='application/vnd.google-apps.folder' and trashed=false`)}&fields=files(id,name)&pageSize=50`);
+  for(const f of r.files){
+    if(f.name===INBOX_NAME){fids.inbox=f.id;continue;}
+    const key=Object.entries(COMPANIES).find(([k,v])=>v===f.name)?.[0];
+    if(!key)continue;
+    fids[key]=f.id;
+    const sub=await api(`/files?q=${encodeURIComponent(`'${f.id}' in parents and mimeType='application/vnd.google-apps.folder' and trashed=false`)}&fields=files(id,name)&pageSize=20`);
+    for(const sf of sub.files)fids[`${key}/${sf.name}`]=sf.id;
+  }
+}
+
+// ── TRIAGE FLOW ────────────────────────────────────────────────────
+async function openInbox(){
+  if(!driveReady||!fids.inbox){toast('Run Drive Setup first');return;}
+  setOv(true,'Scanning inbox…','Listing files…');
+  let files=[];
+  try{
+    const r=await api(`/files?q=${encodeURIComponent(`'${fids.inbox}' in parents and trashed=false`)}&fields=files(id,name,mimeType,createdTime,webViewLink,thumbnailLink)&pageSize=50`);
+    files=r.files;
+  }catch(e){setOv(false);toast('Cannot read inbox: '+e.message);return;}
+  setOv(false);
+  if(!files.length){toast('Post Inbox is empty');return;}
+  triageQueue=files.map(f=>({file:f,manualStatus:'AUTO'}));
+  renderTriage();
+  document.getElementById('triageModal').classList.add('show');
+}
+
+function renderTriage(){
+  const el=document.getElementById('triageFiles');
+  el.innerHTML=triageQueue.map((item,i)=>{
+    const thumb=item.file.thumbnailLink
+      ?`<img src="${item.file.thumbnailLink}" alt="">`
+      :`<svg class="tf-thumb-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>`;
+    const sbtns=Object.entries(S).map(([k,cfg])=>
+      `<button class="tf-sbtn ${item.manualStatus===k?'on':''}" style="background:${cfg.bg};color:${cfg.color};border-color:${item.manualStatus===k?cfg.color:'transparent'}" onclick="setTriageStatus(${i},'${k}')">${cfg.label}</button>`
+    ).join('');
+    return `<div class="triage-file" id="tf-${i}">
+      <div class="tf-thumb">${thumb}</div>
+      <div class="tf-info">
+        <div class="tf-name">${x(item.file.name)}</div>
+        <div class="tf-status-row">${sbtns}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function setTriageStatus(i,status){
+  triageQueue[i].manualStatus=status;
+  renderTriage();
+}
+
+function closeTriage(){
+  document.getElementById('triageModal').classList.remove('show');
+  triageQueue=[];
+}
+
+async function confirmTriage(){
+  document.getElementById('triageModal').classList.remove('show');
+  await processQueue(triageQueue);
+}
+
+// ── PROCESS QUEUE ──────────────────────────────────────────────────
+async function processQueue(queue){
+  setOv(true,'Processing post…',`0 / ${queue.length} done`);
+  let done=0;
+  for(const item of queue){
+    const {file,manualStatus}=item;
+    step(`Reading: ${file.name}`);
+    try{
+      const res=await fetch(`https://www.googleapis.com/drive/v3/files/${file.id}?alt=media`,{headers:{Authorization:'Bearer '+token}});
+      const blob=await res.blob();
+      const b64=await blobToB64(blob);
+      const mime=blob.type.includes('pdf')?'application/pdf':blob.type;
+
+      step(`AI extracting: ${file.name}`);
+      const ex=await callClaude(b64,mime,file.name);
+
+      // Use manual status if set, otherwise use AI's suggestion
+      const finalStatus=manualStatus==='AUTO'?ex.status:manualStatus;
+
+      const dateStr=ex.date||isoToYMD(file.createdTime);
+      const sender=ex.sender.replace(/[^a-zA-Z0-9]/g,'_').replace(/_+/g,'_').slice(0,28).replace(/^_|_$/g,'');
+      const newName=`${dateStr}_${ex.company}_${sender}_${finalStatus}.pdf`;
+      const targetId=fids[`${ex.company}/${ex.category}`]||fids[ex.company]||fids.root;
+
+      step(`Filing: ${newName}`);
+      const inf=await api(`/files/${file.id}?fields=parents`);
+      const oldParents=(inf.parents||[]).join(',');
+      await api(`/files/${file.id}?addParents=${targetId}&removeParents=${oldParents}&fields=id`,{
+        method:'PATCH',body:JSON.stringify({name:newName})
+      });
+      await api('/files',{method:'POST',body:JSON.stringify({
+        name:newName.replace(/\.pdf$/i,'')+'_log',
+        mimeType:'application/vnd.google-apps.document',
+        parents:[targetId],
+        description:JSON.stringify({pm:true,fileId:file.id,...ex,status:finalStatus,filename:newName,manualOverride:manualStatus!=='AUTO'})
+      })});
+
+      letters.unshift({
+        id:file.id,filename:newName,date:dateStr,
+        company:ex.company,sender:ex.sender,subject:ex.subject,
+        summary:ex.summary,category:ex.category,keyDetails:ex.keyDetails,
+        amount:ex.amount,ref:ex.ref,actionRequired:ex.actionRequired,
+        status:finalStatus,manualOverride:manualStatus!=='AUTO',
+        driveLink:file.webViewLink
+      });
+      renderList();
+    }catch(e){console.error(file.name,e);toast('Error: '+file.name+' — '+e.message);}
+    done++;
+    step(`${done} / ${queue.length} done`);
+  }
+  setOv(false);
+  toast(`✓ Filed ${done} letter(s)`);
+  if(letters.length)selectLetter(letters[0].id);
+}
+
+// ── CLAUDE ─────────────────────────────────────────────────────────
+async function callClaude(b64,mime,filename){
+  const isPdf=mime==='application/pdf';
+  const block=isPdf
+    ?{type:'document',source:{type:'base64',media_type:'application/pdf',data:b64}}
+    :{type:'image',source:{type:'base64',media_type:mime,data:b64}};
+  const knownSenders=[...new Set(letters.map(l=>l.sender))].slice(0,20).join(', ')||'none';
+  const prompt=`Extract details from this scanned letter for a Berlin business group. Return ONLY valid JSON, no markdown.
+
+Companies: Open House UG (OH), Sincerely UG (SIN), Bureau Darcy UG (BD).
+Previously seen senders: ${knownSenders}
+
+Return exactly:
+{
+  "company":"OH"|"SIN"|"BD",
+  "sender":"organisation or person name",
+  "subject":"one-line subject",
+  "date":"YYYYMMDD",
+  "summary":"2-3 sentence plain English summary",
+  "keyDetails":"amounts, refs, deadlines",
+  "amount":"€X or null",
+  "ref":"reference number or null",
+  "category":"Invoices & Finance"|"Legal & Contracts"|"Tax & Steuerberater"|"General Correspondence"|"Action Required",
+  "actionRequired":"specific action or null",
+  "status":"TAXMAN"|"AWAITINFO"|"AWAITPAY"|"PAID"|"FILED"
+}
+
+Status: Finanzamt/tax → TAXMAN. Invoice we must pay → AWAITPAY. Need more info → AWAITINFO. Already settled → PAID. Otherwise → FILED.
+Infer company from letterhead/address. Default OH if unclear. File: ${filename}`;
+
+  const r=await fetch('https://api.anthropic.com/v1/messages',{
+    method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,
+      messages:[{role:'user',content:[block,{type:'text',text:prompt}]}]})
+  });
+  const d=await r.json();
+  const raw=d.content?.find(c=>c.type==='text')?.text||'{}';
+  try{return JSON.parse(raw.replace(/```json|```/g,'').trim());}
+  catch{return{company:'OH',sender:'Unknown',subject:filename,date:isoToYMD(new Date().toISOString()),
+    summary:'Extraction failed',keyDetails:'',amount:null,ref:null,
+    category:'General Correspondence',actionRequired:null,status:'FILED'};}
+}
+
+// ── STATUS UPDATE ──────────────────────────────────────────────────
+async function updateStatus(id,ns){
+  const l=letters.find(x=>x.id===id);if(!l)return;
+  const parts=l.filename.replace(/\.pdf$/i,'').split('_');
+  const newName=parts.slice(0,-1).join('_')+'_'+ns+'.pdf';
+  try{
+    await api(`/files/${id}?fields=id`,{method:'PATCH',body:JSON.stringify({name:newName})});
+    l.status=ns;l.filename=newName;
+    renderList();renderDetail(l);
+    toast('Status → '+S_MAIN[ns].label);
+  }catch(e){toast('Update failed: '+e.message);}
+}
+
+// ── RENDER ─────────────────────────────────────────────────────────
+function renderList(){
+  const filtered=letters.filter(l=>
+    (activeCo==='ALL'||l.company===activeCo)&&
+    (activeSt==='ALL'||l.status===activeSt)
+  );
+  const el=document.getElementById('letterList');
+  if(!filtered.length){
+    el.innerHTML=`<div style="padding:1.25rem;text-align:center;font-family:var(--sans);font-size:12px;color:var(--muted)">No letters</div>`;return;
+  }
+  el.innerHTML=filtered.map(l=>{
+    const sc=S_MAIN[l.status]||S_MAIN.FILED;
+    return `<div class="lcard ${activeId===l.id?'on':''}" onclick="selectLetter('${l.id}')">
+      <div class="lc-row"><div class="lc-sender">${x(l.sender)}</div><div class="lc-date">${fd(l.date)}</div></div>
+      <div class="lc-subj">${x(l.subject)}</div>
+      <div class="lc-badges">
+        <span class="badge" style="background:#f1f0ee;color:var(--muted)">${l.company}</span>
+        <span class="badge" style="background:${sc.bg};color:${sc.color}">${sc.label}</span>
+        ${l.manualOverride?`<span class="badge" style="background:#ede8e1;color:var(--muted)">manual</span>`:''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function selectLetter(id){
+  activeId=id;renderList();
+  const l=letters.find(x=>x.id===id);if(l)renderDetail(l);
+}
+
+function renderDetail(l){
+  const sc=S_MAIN[l.status]||S_MAIN.FILED;
+  const related=letters.filter(r=>r.id!==l.id&&(
+    r.sender.toLowerCase()===l.sender.toLowerCase()||(r.ref&&l.ref&&r.ref===l.ref)
+  ));
+  const sbtns=Object.entries(S_MAIN).map(([k,cfg])=>
+    `<button class="sbtn ${l.status===k?'on':''}" style="background:${cfg.bg};color:${cfg.color};border-color:${cfg.color}" onclick="updateStatus('${l.id}','${k}')">${cfg.label}</button>`
+  ).join('');
+  const rel=related.length?`<div class="scard"><div class="sec-label">Related (${related.length})</div>${
+    related.map(r=>{const rs=S_MAIN[r.status]||S_MAIN.FILED;return`<div class="related-item" onclick="selectLetter('${r.id}')">
+      <div class="ri-dot" style="background:${rs.color}"></div>
+      <div class="ri-info"><div class="ri-name">${x(r.subject)}</div><div class="ri-meta">${x(r.sender)} · ${fd(r.date)}</div></div>
+      <span class="badge" style="background:${rs.bg};color:${rs.color}">${rs.label}</span></div>`;}).join('')
+  }</div>`:'';
+
+  document.getElementById('content').innerHTML=`<div class="detail">
+    <div class="d-header">
+      <div class="d-co">${COMPANIES[l.company]||l.company}</div>
+      <div class="d-subject">${x(l.subject)}</div>
+      <div class="d-chips">
+        <div class="chip"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>${fd(l.date)}</div>
+        <div class="chip"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>${x(l.sender)}</div>
+        ${l.amount?`<div class="chip">${x(l.amount)}</div>`:''}
+        ${l.ref?`<div class="chip">Ref: ${x(l.ref)}</div>`:''}
+        <div class="chip">📁 ${x(l.category)}</div>
+        ${l.manualOverride?`<div class="chip" style="color:var(--amber)">manually set</div>`:''}
+      </div>
+      <div class="fname">${x(l.filename)}</div>
+    </div>
+    ${l.actionRequired?`<div class="action-box"><div class="action-label">Action Required</div><div class="action-text">${x(l.actionRequired)}</div></div>`:''}
+    <div class="d-grid">
+      <div class="dcard"><div class="dcard-label">Summary</div><div class="dcard-val">${x(l.summary)}</div></div>
+      <div class="dcard"><div class="dcard-label">Key Details</div><div class="dcard-val">${x(l.keyDetails)}</div></div>
+    </div>
+    <div class="scard"><div class="sec-label">Status</div><div class="sbtn-row">${sbtns}</div></div>
+    ${rel}
+    <div class="scard"><div class="sec-label">Drive</div>
+      <a class="btn" href="${l.driveLink}" target="_blank">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        Open in Drive ↗
+      </a>
+    </div>
+  </div>`;
+}
+
+// ── FILTERS ────────────────────────────────────────────────────────
+function setCompany(c,el){activeCo=c;document.querySelectorAll('.ctab').forEach(t=>t.classList.remove('on'));el.classList.add('on');renderList();}
+function filterStatus(s,el){activeSt=s;document.querySelectorAll('.sp').forEach(p=>p.classList.remove('on'));el.classList.add('on');renderList();}
+
+// ── UTILS ──────────────────────────────────────────────────────────
+function x(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function fd(d){if(!d||d.length<8)return d||'';return d.slice(6,8)+'.'+d.slice(4,6)+'.'+d.slice(0,4);}
+function isoToYMD(iso){const d=new Date(iso);return d.getFullYear()+String(d.getMonth()+1).padStart(2,'0')+String(d.getDate()).padStart(2,'0');}
+function blobToB64(blob){return new Promise(res=>{const r=new FileReader();r.onload=()=>res(r.result.split(',')[1]);r.readAsDataURL(blob);});}
+function setOv(show,title,s){document.getElementById('overlay').className=show?'show':'';if(title)document.getElementById('ovTitle').textContent=title;if(s)document.getElementById('ovStep').textContent=s;}
+function step(s){document.getElementById('ovStep').textContent=s;}
+function toast(msg,ms=3200){const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),ms);}
+
+checkAuth();
+</script>
+</body>
+</html>
