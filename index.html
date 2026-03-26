@@ -21,9 +21,9 @@ body{font-family:var(--mono);background:var(--bg);color:var(--text);min-height:1
 header{background:var(--surface);border-bottom:1px solid var(--b);padding:.7rem 1.25rem;display:flex;align-items:center;gap:.75rem;flex-shrink:0;z-index:10}
 .logo{font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--acc)}
 .spacer{flex:1}
-.main{display:grid;grid-template-columns:290px 1fr;flex:1;overflow:hidden}
+.main{display:grid;grid-template-columns:300px 1fr;flex:1;overflow:hidden}
 .sidebar{background:var(--surface);border-right:1px solid var(--b);display:flex;flex-direction:column;overflow:hidden}
-.sb-top{padding:.9rem 1rem;border-bottom:1px solid var(--b);flex-shrink:0}
+.sb-top{padding:.75rem 1rem;border-bottom:1px solid var(--b);flex-shrink:0}
 .letter-list{flex:1;overflow-y:auto;padding:.4rem}
 .content{overflow-y:auto;background:var(--bg);padding:1.25rem}
 
@@ -31,7 +31,6 @@ header{background:var(--surface);border-bottom:1px solid var(--b);padding:.7rem 
 .btn:hover{background:var(--bg)}
 .btn-primary{background:var(--acc);color:#fff;border-color:var(--acc)}
 .btn-primary:hover{background:#9e2b21}
-.btn-xs{padding:3px 8px;font-size:10px;border-radius:5px}
 .btn:disabled{opacity:.35;pointer-events:none}
 
 /* auth */
@@ -45,10 +44,20 @@ header{background:var(--surface);border-bottom:1px solid var(--b);padding:.7rem 
 .scope-item:last-child{border:none;padding-bottom:0}
 .scope-icon{color:var(--green);font-size:11px;margin-top:1px;flex-shrink:0}
 
-/* company tabs */
+/* tabs */
 .ctabs{display:flex;gap:3px;background:var(--bg);padding:3px;border-radius:8px;border:1px solid var(--b)}
 .ctab{padding:4px 10px;border:none;background:transparent;border-radius:5px;font-family:var(--mono);font-size:10px;color:var(--muted);cursor:pointer;transition:all .12s;letter-spacing:.04em}
 .ctab.on{background:var(--surface);color:var(--text);font-weight:500;box-shadow:0 1px 3px rgba(0,0,0,.07)}
+
+/* search */
+.search-wrap{position:relative;margin-bottom:.6rem}
+.search-icon{position:absolute;left:9px;top:50%;transform:translateY(-50%);opacity:.35;pointer-events:none}
+.search-input{width:100%;padding:6px 28px 6px 30px;border:1px solid var(--b);border-radius:7px;font-family:var(--sans);font-size:12px;background:var(--bg);color:var(--text);transition:border-color .12s}
+.search-input:focus{outline:none;border-color:var(--bmd)}
+.search-clear{position:absolute;right:8px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--muted);font-size:14px;line-height:1;display:none}
+.search-clear.show{display:block}
+.search-count{font-size:10px;color:var(--muted);margin-bottom:.4rem}
+.hi{background:#ffe08a;border-radius:2px;padding:0 1px}
 
 /* status pills */
 .spills{display:flex;flex-wrap:wrap;gap:4px}
@@ -79,8 +88,6 @@ header{background:var(--surface);border-bottom:1px solid var(--b);padding:.7rem 
 .d-subject{font-family:var(--sans);font-size:17px;font-weight:500;margin-bottom:.7rem}
 .d-chips{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
 .chip{display:flex;align-items:center;gap:4px;font-family:var(--sans);font-size:11px;color:var(--muted);background:var(--bg);padding:3px 8px;border-radius:6px;border:1px solid var(--b)}
-.chip-copy{cursor:pointer;opacity:.5;transition:opacity .1s}
-.chip-copy:hover{opacity:1}
 .fname{font-size:10px;color:var(--muted);background:#ede8e1;border-radius:5px;padding:4px 8px;margin-top:.6rem;word-break:break-all;font-family:var(--mono)}
 .d-grid{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:.75rem}
 .dcard{background:var(--surface);border:1px solid var(--b);border-radius:10px;padding:.9rem 1rem}
@@ -109,17 +116,16 @@ header{background:var(--surface);border-bottom:1px solid var(--b);padding:.7rem 
 .notes-saved{font-size:10px;color:var(--green);opacity:0;transition:opacity .4s}
 .notes-saved.show{opacity:1}
 
-/* pdf preview */
-.preview-frame{width:100%;height:500px;border:none;border-radius:8px;background:#f0ede8}
-.preview-fallback{background:var(--bg);border:1px solid var(--b);border-radius:8px;padding:1.5rem;text-align:center;font-family:var(--sans);font-size:12px;color:var(--muted)}
-
-/* payment info card */
+/* payment info */
 .pay-grid{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:.75rem}
 .pay-card{background:var(--blue-bg);border:1px solid rgba(20,72,122,.15);border-radius:10px;padding:.9rem 1rem}
 .pay-label{font-size:9px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);margin-bottom:.3rem}
-.pay-val{font-family:var(--mono);font-size:12px;color:var(--text);word-break:break-all;display:flex;align-items:center;justify-content:space-between;gap:6px}
-.copy-btn{background:none;border:none;cursor:pointer;color:var(--blue);opacity:.6;font-size:11px;padding:2px 4px;border-radius:4px;transition:opacity .1s;white-space:nowrap;font-family:var(--sans)}
+.pay-val{font-family:var(--mono);font-size:11px;color:var(--text);word-break:break-all;display:flex;align-items:flex-start;justify-content:space-between;gap:6px}
+.copy-btn{background:none;border:none;cursor:pointer;color:var(--blue);opacity:.6;font-size:11px;padding:2px 4px;border-radius:4px;font-family:var(--sans);white-space:nowrap;flex-shrink:0}
 .copy-btn:hover{opacity:1;background:rgba(20,72,122,.1)}
+
+/* preview */
+.preview-frame{width:100%;height:500px;border:none;border-radius:8px;background:#f0ede8}
 
 /* empty */
 .empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;color:var(--muted);text-align:center;padding:2rem}
@@ -135,7 +141,7 @@ header{background:var(--surface);border-bottom:1px solid var(--b);padding:.7rem 
 .ov-title{font-family:var(--sans);font-size:14px;font-weight:500;margin-bottom:.4rem}
 .ov-step{font-size:11px;color:var(--muted);line-height:1.7;min-height:2.5rem}
 
-/* triage modal */
+/* triage */
 #triageModal{position:fixed;inset:0;background:rgba(26,26,24,.45);display:none;align-items:center;justify-content:center;z-index:150;backdrop-filter:blur(2px)}
 #triageModal.show{display:flex}
 .triage-card{background:var(--surface);border:1px solid var(--b);border-radius:16px;width:520px;max-height:88vh;overflow-y:auto;box-shadow:0 8px 40px rgba(0,0,0,.12)}
@@ -155,6 +161,10 @@ header{background:var(--surface);border-bottom:1px solid var(--b);padding:.7rem 
 .triage-note{font-family:var(--sans);font-size:11px;color:var(--muted);margin-bottom:1rem;padding:.6rem .75rem;background:var(--blue-bg);border-radius:7px;border:1px solid rgba(20,72,122,.15);line-height:1.5}
 .triage-footer{padding:.9rem 1.25rem;border-top:1px solid var(--b);display:flex;justify-content:flex-end;gap:.5rem}
 
+/* blocked screen */
+#blockedScreen{flex:1;display:none;align-items:center;justify-content:center;padding:2rem}
+.blocked-card{background:var(--surface);border:1px solid var(--b);border-radius:16px;padding:2.5rem 2rem;width:360px;text-align:center}
+
 /* toast */
 #toast{position:fixed;bottom:1.25rem;right:1.25rem;background:var(--text);color:#fff;padding:.6rem 1rem;border-radius:8px;font-family:var(--sans);font-size:12px;z-index:200;opacity:0;transform:translateY(6px);transition:all .2s;max-width:280px;pointer-events:none}
 #toast.show{opacity:1;transform:translateY(0)}
@@ -167,27 +177,31 @@ header{background:var(--surface);border-bottom:1px solid var(--b);padding:.7rem 
   <div id="authScreen">
     <div class="auth-card">
       <div class="auth-icon">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#b83225" stroke-width="1.8">
-          <path d="M4 4h16v16H4z"/><path d="M4 9h16M9 9v11"/>
-        </svg>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#b83225" stroke-width="1.8"><path d="M4 4h16v16H4z"/><path d="M4 9h16M9 9v11"/></svg>
       </div>
       <div class="auth-title">Post Manager</div>
       <div class="auth-sub">Connects to Google Drive to file, rename, and track post for Open House UG, Sincerely UG, and Bureau Darcy UG.</div>
       <div class="scope-list">
-        <div class="scope-item"><span class="scope-icon">✓</span><span>Read and list files in your Drive (inbox folder only)</span></div>
-        <div class="scope-item"><span class="scope-icon">✓</span><span>Create folders and Google Docs for filing</span></div>
-        <div class="scope-item"><span class="scope-icon">✓</span><span>Rename files and move them to correct folders</span></div>
-        <div class="scope-item"><span class="scope-icon">✓</span><span>No other data accessed or stored externally</span></div>
-      </div>
-      <div style="background:var(--amber-bg);border:1px solid rgba(122,80,0,.2);border-radius:8px;padding:.7rem .9rem;margin-bottom:1.1rem;text-align:left">
-        <div style="font-size:10px;font-weight:500;color:var(--amber);margin-bottom:2px;letter-spacing:.05em;text-transform:uppercase">One-time setup needed</div>
-        <div style="font-family:var(--sans);font-size:11px;color:var(--amber);line-height:1.5">Set <code>CLIENT_ID</code> in the HTML to your Google OAuth 2.0 Client ID before hosting.</div>
+        <div class="scope-item"><span class="scope-icon">✓</span><span>Read and list files in your Drive</span></div>
+        <div class="scope-item"><span class="scope-icon">✓</span><span>Create folders and log docs for filing</span></div>
+        <div class="scope-item"><span class="scope-icon">✓</span><span>Rename and move files automatically</span></div>
+        <div class="scope-item"><span class="scope-icon">✓</span><span>No data stored outside your Drive</span></div>
       </div>
       <button class="btn btn-primary" style="width:100%;justify-content:center;font-size:13px;padding:10px" onclick="startAuth()">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M10 14L21 3M9 3H3v18h18v-6"/></svg>
         Connect Google Drive
       </button>
       <div style="margin-top:.7rem;font-size:10px;color:var(--muted)">Redirects to Google OAuth — one-time authorisation</div>
+    </div>
+  </div>
+
+  <!-- BLOCKED -->
+  <div id="blockedScreen">
+    <div class="blocked-card">
+      <div style="font-size:32px;margin-bottom:1rem">🔒</div>
+      <div style="font-family:var(--sans);font-size:16px;font-weight:500;margin-bottom:.5rem">Access denied</div>
+      <div style="font-family:var(--sans);font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:1.25rem">This app is private. You signed in with an account that isn't authorised.</div>
+      <button class="btn" style="width:100%;justify-content:center" onclick="signOut()">Sign out and try again</button>
     </div>
   </div>
 
@@ -202,8 +216,12 @@ header{background:var(--surface);border-bottom:1px solid var(--b);padding:.7rem 
         <button class="ctab" onclick="setCompany('BD',this)">BD</button>
       </div>
       <div class="spacer"></div>
-      <button class="btn" onclick="openInbox()">
+      <button class="btn" onclick="loadLettersFromDrive()" title="Refresh from Drive">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.51"/></svg>
+        Refresh
+      </button>
+      <button class="btn" onclick="openInbox()">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
         Process Inbox
       </button>
       <button class="btn btn-primary" onclick="runSetup()">
@@ -215,7 +233,13 @@ header{background:var(--surface);border-bottom:1px solid var(--b);padding:.7rem 
     <div class="main">
       <div class="sidebar">
         <div class="sb-top">
-          <div style="font-size:9px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem">Status</div>
+          <div class="search-wrap">
+            <svg class="search-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input class="search-input" id="searchInput" type="text" placeholder="Search sender, subject, ref, notes…" oninput="handleSearch(this.value)">
+            <button class="search-clear" id="searchClear" onclick="clearSearch()">✕</button>
+          </div>
+          <div id="searchCount" class="search-count" style="display:none"></div>
+          <div style="font-size:9px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.4rem">Status</div>
           <div class="spills">
             <div class="sp sp-all on" onclick="filterStatus('ALL',this)">All</div>
             <div class="sp sp-taxman" onclick="filterStatus('TAXMAN',this)">Tax Man</div>
@@ -226,35 +250,30 @@ header{background:var(--surface);border-bottom:1px solid var(--b);padding:.7rem 
           </div>
         </div>
         <div class="letter-list" id="letterList">
-          <div style="padding:1.25rem;text-align:center;font-family:var(--sans);font-size:12px;color:var(--muted)">No letters yet</div>
+          <div style="padding:1.25rem;text-align:center;font-family:var(--sans);font-size:12px;color:var(--muted)">Loading…</div>
         </div>
       </div>
 
       <div class="content" id="content">
         <div class="empty">
-          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.1" style="opacity:.2;margin-bottom:.75rem">
-            <path d="M4 4h16v16H4z"/><path d="M4 9h16M9 9v11"/>
-          </svg>
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.1" style="opacity:.2;margin-bottom:.75rem"><path d="M4 4h16v16H4z"/><path d="M4 9h16M9 9v11"/></svg>
           <div class="empty-title">No letter selected</div>
-          <div class="empty-sub">Click "Process Inbox" to read and file your post</div>
+          <div class="empty-sub">Select a letter from the list or process your inbox</div>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- TRIAGE MODAL -->
+<!-- TRIAGE -->
 <div id="triageModal">
   <div class="triage-card">
     <div class="triage-header">
-      <div>
-        <div class="triage-title">Triage Inbox</div>
-        <div class="triage-sub">Set status before processing — AI still extracts all details</div>
-      </div>
+      <div><div class="triage-title">Triage Inbox</div><div class="triage-sub">Set status before processing — AI still extracts all details</div></div>
       <button class="triage-close" onclick="closeTriage()">✕</button>
     </div>
     <div class="triage-body">
-      <div class="triage-note">Leave as <strong>Auto</strong> to let AI decide. Override anything you've already dealt with — e.g. mark as Paid before filing.</div>
+      <div class="triage-note">Leave as <strong>Auto</strong> to let AI decide. Override anything you already know — e.g. mark Paid before filing.</div>
       <div id="triageFiles"></div>
     </div>
     <div class="triage-footer">
@@ -267,21 +286,18 @@ header{background:var(--surface);border-bottom:1px solid var(--b);padding:.7rem 
   </div>
 </div>
 
-<div id="overlay">
-  <div class="ov-card">
-    <div class="spinner"></div>
-    <div class="ov-title" id="ovTitle">Working…</div>
-    <div class="ov-step" id="ovStep"></div>
-  </div>
-</div>
+<div id="overlay"><div class="ov-card"><div class="spinner"></div><div class="ov-title" id="ovTitle">Working…</div><div class="ov-step" id="ovStep"></div></div></div>
 <div id="toast"></div>
 
 <script>
+// ── CONFIG ─────────────────────────────────────────────────────────
 const CLIENT_ID    = 'YOUR_GOOGLE_OAUTH_CLIENT_ID';
+const ALLOWED_EMAIL = 'john@bureaudarcy.com';
 const REDIRECT_URI = window.location.href.split('?')[0].split('#')[0];
-const SCOPES       = 'https://www.googleapis.com/auth/drive';
+const SCOPES       = 'https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/userinfo.email';
 const ROOT_NAME    = 'Post Manager';
 const INBOX_NAME   = 'Post Inbox';
+const WORKER_URL   = 'https://post.john-7f3.workers.dev/';
 
 const COMPANIES = { OH:'Open House UG', SIN:'Sincerely UG', BD:'Bureau Darcy UG' };
 const CATS = ['Invoices & Finance','Legal & Contracts','Tax & Steuerberater','General Correspondence','Action Required'];
@@ -297,23 +313,52 @@ const S = {
 const S_MAIN = Object.fromEntries(Object.entries(S).filter(([k])=>k!=='AUTO'));
 
 let token=null, letters=[], fids={}, driveReady=false;
-let activeCo='ALL', activeSt='ALL', activeId=null;
-let triageQueue=[];
+let activeCo='ALL', activeSt='ALL', activeId=null, searchQ='';
+let triageQueue=[], notesTimers={};
 
-// ── AUTH ───────────────────────────────────────────────────────────
+// ── AUTH + EMAIL CHECK ─────────────────────────────────────────────
 function startAuth(){
   const p=new URLSearchParams({client_id:CLIENT_ID,redirect_uri:REDIRECT_URI,response_type:'token',scope:SCOPES,prompt:'consent'});
   window.location.href='https://accounts.google.com/o/oauth2/v2/auth?'+p;
 }
-function checkAuth(){
+
+async function checkAuth(){
   const hash=new URLSearchParams(window.location.hash.replace('#',''));
   const t=hash.get('access_token');
-  if(t){token=t;sessionStorage.setItem('pm_tok',t);history.replaceState(null,'',REDIRECT_URI);showMain();return;}
+  if(t){
+    token=t;
+    history.replaceState(null,'',REDIRECT_URI);
+    const ok=await verifyEmail();
+    if(!ok){showBlocked();return;}
+    sessionStorage.setItem('pm_tok',t);
+    showMain();return;
+  }
   const s=sessionStorage.getItem('pm_tok');
-  if(s){token=s;showMain();}
+  if(s){token=s;showMain();return;}
+  // show auth screen
 }
+
+async function verifyEmail(){
+  try{
+    const r=await fetch('https://www.googleapis.com/oauth2/v3/userinfo',{headers:{Authorization:'Bearer '+token}});
+    const d=await r.json();
+    return d.email && d.email.toLowerCase()===ALLOWED_EMAIL.toLowerCase();
+  }catch(e){return false;}
+}
+
+function showBlocked(){
+  document.getElementById('authScreen').style.display='none';
+  document.getElementById('blockedScreen').style.display='flex';
+}
+
+function signOut(){
+  sessionStorage.clear();
+  location.reload();
+}
+
 function showMain(){
   document.getElementById('authScreen').style.display='none';
+  document.getElementById('blockedScreen').style.display='none';
   document.getElementById('mainApp').style.display='flex';
   checkDriveReady();
 }
@@ -343,8 +388,13 @@ async function getRoot(){
 
 // ── SETUP ──────────────────────────────────────────────────────────
 async function checkDriveReady(){
-  try{const rootId=await getRoot();if(rootId){await loadFids(rootId);driveReady=true;}}catch(e){}
+  try{
+    const rootId=await getRoot();
+    if(rootId){await loadFids(rootId);driveReady=true;await loadLettersFromDrive();}
+    else{document.getElementById('letterList').innerHTML=`<div style="padding:1rem;text-align:center;font-family:var(--sans);font-size:12px;color:var(--muted)">Click Drive Setup to get started</div>`;}
+  }catch(e){console.error(e);}
 }
+
 async function runSetup(){
   setOv(true,'Setting up Drive','Creating folder structure…');
   try{
@@ -359,6 +409,7 @@ async function runSetup(){
     toast('✓ Drive ready. Drop scans into "Post Inbox".');
   }catch(e){setOv(false);toast('Setup error: '+e.message);}
 }
+
 async function loadFids(rootId){
   fids.root=rootId;
   const r=await api(`/files?q=${encodeURIComponent(`'${rootId}' in parents and mimeType='application/vnd.google-apps.folder' and trashed=false`)}&fields=files(id,name)&pageSize=50`);
@@ -369,6 +420,81 @@ async function loadFids(rootId){
     const sub=await api(`/files?q=${encodeURIComponent(`'${f.id}' in parents and mimeType='application/vnd.google-apps.folder' and trashed=false`)}&fields=files(id,name)&pageSize=20`);
     for(const sf of sub.files)fids[`${key}/${sf.name}`]=sf.id;
   }
+}
+
+// ── LOAD FROM DRIVE ────────────────────────────────────────────────
+async function loadLettersFromDrive(){
+  setOv(true,'Loading letters…','Reading filed documents…');
+  letters=[];
+  try{
+    for(const co of ['OH','SIN','BD']){
+      for(const cat of CATS){
+        const folderId=fids[`${co}/${cat}`];
+        if(!folderId)continue;
+        const q=encodeURIComponent(`'${folderId}' in parents and mimeType='application/vnd.google-apps.document' and trashed=false`);
+        const r=await api(`/files?q=${q}&fields=files(id,name,description,webViewLink)&pageSize=200`);
+        for(const doc of r.files){
+          if(!doc.description)continue;
+          try{
+            const data=JSON.parse(doc.description);
+            if(!data.pm)continue;
+            if(letters.find(l=>l.logDocId===doc.id))continue;
+            // Find the PDF
+            const safeName=(data.filename||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+            const pdfQ=encodeURIComponent(`'${folderId}' in parents and name='${safeName}' and trashed=false`);
+            const pdfR=await api(`/files?q=${pdfQ}&fields=files(id,webViewLink)&pageSize=1`);
+            const fileId=pdfR.files[0]?.id||data.fileId||doc.id;
+            const driveLink=pdfR.files[0]?.webViewLink||data.driveLink||doc.webViewLink;
+            letters.push({
+              id:fileId,logDocId:doc.id,
+              filename:data.filename||'',date:data.date||'',
+              company:data.company||co,sender:data.sender||'Unknown',
+              subject:data.subject||'',summary:data.summary||'',
+              category:data.category||cat,keyDetails:data.keyDetails||'',
+              amount:data.amount||null,ref:data.ref||null,
+              iban:data.iban||null,payRef:data.payRef||null,
+              actionRequired:data.actionRequired||null,
+              status:data.status||'FILED',paidDate:data.paidDate||null,
+              manualOverride:data.manualOverride||false,
+              notes:data.notes||'',driveLink
+            });
+          }catch(e){/* skip malformed */}
+        }
+      }
+    }
+    letters.sort((a,b)=>b.date.localeCompare(a.date));
+  }catch(e){console.error('Load failed',e);}
+  setOv(false);
+  renderList();
+  toast(`✓ Loaded ${letters.length} letter(s)`);
+}
+
+// ── SAVE LOG DOC ───────────────────────────────────────────────────
+async function saveLogDoc(l,targetFolderId){
+  const desc=buildDesc(l);
+  const r=await api('/files',{method:'POST',body:JSON.stringify({
+    name:l.filename.replace(/\.pdf$/i,'')+'_log',
+    mimeType:'application/vnd.google-apps.document',
+    parents:[targetFolderId],description:desc
+  })});
+  return r.id;
+}
+
+async function updateLogDoc(l){
+  if(!l.logDocId)return;
+  await api(`/files/${l.logDocId}?fields=id`,{method:'PATCH',body:JSON.stringify({description:buildDesc(l)})});
+}
+
+function buildDesc(l){
+  return JSON.stringify({
+    pm:true,fileId:l.id,filename:l.filename,date:l.date,
+    company:l.company,sender:l.sender,subject:l.subject,
+    summary:l.summary,category:l.category,keyDetails:l.keyDetails,
+    amount:l.amount,ref:l.ref,iban:l.iban,payRef:l.payRef,
+    actionRequired:l.actionRequired,status:l.status,
+    paidDate:l.paidDate,manualOverride:l.manualOverride,
+    notes:l.notes,driveLink:l.driveLink
+  });
 }
 
 // ── TRIAGE ─────────────────────────────────────────────────────────
@@ -401,7 +527,7 @@ function setTriageStatus(i,s){triageQueue[i].manualStatus=s;renderTriage();}
 function closeTriage(){document.getElementById('triageModal').classList.remove('show');triageQueue=[];}
 async function confirmTriage(){document.getElementById('triageModal').classList.remove('show');await processQueue(triageQueue);}
 
-// ── PROCESS ────────────────────────────────────────────────────────
+// ── PROCESS QUEUE ──────────────────────────────────────────────────
 async function processQueue(queue){
   setOv(true,'Processing post…',`0 / ${queue.length} done`);
   let done=0;
@@ -424,36 +550,26 @@ async function processQueue(queue){
       const targetId=fids[`${ex.company}/${ex.category}`]||fids[ex.company]||fids.root;
       step(`Filing: ${newName}`);
       const inf=await api(`/files/${file.id}?fields=parents`);
-      const oldParents=(inf.parents||[]).join(',');
-      await api(`/files/${file.id}?addParents=${targetId}&removeParents=${oldParents}&fields=id`,{
+      const oldPar=(inf.parents||[]).join(',');
+      await api(`/files/${file.id}?addParents=${targetId}&removeParents=${oldPar}&fields=id`,{
         method:'PATCH',body:JSON.stringify({name:newName})
       });
-      await saveLogDoc(file.id,newName,targetId,ex,finalStatus,paidDate,'');
-      letters.unshift({
-        id:file.id,filename:newName,date:dateStr,
+      const letter={
+        id:file.id,logDocId:null,filename:newName,date:dateStr,
         company:ex.company,sender:ex.sender,subject:ex.subject,
         summary:ex.summary,category:ex.category,keyDetails:ex.keyDetails,
         amount:ex.amount,ref:ex.ref,iban:ex.iban,payRef:ex.payRef,
-        actionRequired:ex.actionRequired,
-        status:finalStatus,paidDate,manualOverride:manualStatus!=='AUTO',
-        notes:'',driveLink:file.webViewLink,logDocId:null
-      });
+        actionRequired:ex.actionRequired,status:finalStatus,paidDate,
+        manualOverride:manualStatus!=='AUTO',notes:'',driveLink:file.webViewLink
+      };
+      letter.logDocId=await saveLogDoc(letter,targetId);
+      letters.unshift(letter);
       renderList();
     }catch(e){console.error(file.name,e);toast('Error: '+file.name+' — '+e.message);}
     done++;step(`${done} / ${queue.length} done`);
   }
   setOv(false);toast(`✓ Filed ${done} letter(s)`);
   if(letters.length)selectLetter(letters[0].id);
-}
-
-async function saveLogDoc(fileId,filename,folderId,ex,status,paidDate,notes){
-  const body=JSON.stringify({pm:true,fileId,filename,status,paidDate,notes,...ex});
-  const r=await api('/files',{method:'POST',body:JSON.stringify({
-    name:filename.replace(/\.pdf$/i,'')+'_log',
-    mimeType:'application/vnd.google-apps.document',
-    parents:[folderId],description:body
-  })});
-  return r.id;
 }
 
 // ── CLAUDE ─────────────────────────────────────────────────────────
@@ -475,9 +591,9 @@ Return exactly:
   "subject":"one-line subject",
   "date":"YYYYMMDD",
   "summary":"2-3 sentence plain English summary",
-  "keyDetails":"amounts, refs, deadlines",
+  "keyDetails":"amounts, refs, deadlines as short string",
   "amount":"€X or null",
-  "ref":"reference number or null",
+  "ref":"reference/Aktenzeichen or null",
   "iban":"IBAN if present or null",
   "payRef":"payment reference/Verwendungszweck if present or null",
   "category":"Invoices & Finance"|"Legal & Contracts"|"Tax & Steuerberater"|"General Correspondence"|"Action Required",
@@ -485,10 +601,10 @@ Return exactly:
   "status":"TAXMAN"|"AWAITINFO"|"AWAITPAY"|"PAID"|"FILED"
 }
 
-Status: Finanzamt/tax → TAXMAN. Invoice we must pay → AWAITPAY. Need info → AWAITINFO. Already settled → PAID. Otherwise → FILED.
+Status: Finanzamt/tax → TAXMAN. Invoice we must pay → AWAITPAY. Need info → AWAITINFO. Settled → PAID. Otherwise → FILED.
 Infer company from letterhead/address. Default OH if unclear. File: ${filename}`;
 
-  const r=await fetch('https://post.john-7f3.workers.dev/',{
+  const r=await fetch(WORKER_URL,{
     method:'POST',headers:{'Content-Type':'application/json'},
     body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,
       messages:[{role:'user',content:[block,{type:'text',text:prompt}]}]})
@@ -505,49 +621,85 @@ Infer company from letterhead/address. Default OH if unclear. File: ${filename}`
 async function updateStatus(id,ns){
   const l=letters.find(x=>x.id===id);if(!l)return;
   const paidDate=ns==='PAID'?isoToYMD(new Date().toISOString()):null;
+  // Rebuild filename keeping YYYYMMDD_CO_Sender base
   const parts=l.filename.replace(/\.pdf$/i,'').split('_');
-  // strip old status and paid suffix — keep YYYYMMDD_CO_Sender parts
-  const baseParts=parts.slice(0,3).join('_');
+  const base=parts.slice(0,3).join('_');
   const paidSuffix=paidDate?`_PAID${paidDate}`:'';
-  const newName=`${baseParts}_${ns}${paidSuffix}.pdf`;
+  const newName=`${base}_${ns}${paidSuffix}.pdf`;
   try{
     await api(`/files/${id}?fields=id`,{method:'PATCH',body:JSON.stringify({name:newName})});
     l.status=ns;l.filename=newName;l.paidDate=paidDate;
+    await updateLogDoc(l);
     renderList();renderDetail(l);
-    toast('Status → '+S_MAIN[ns].label+(paidDate?' (paid '+fd(paidDate)+')':''));
+    toast('Status → '+S_MAIN[ns].label+(paidDate?' · paid '+fd(paidDate):''));
   }catch(e){toast('Update failed: '+e.message);}
 }
 
 // ── NOTES ──────────────────────────────────────────────────────────
-async function saveNotes(id){
+function handleNotes(id){
   const l=letters.find(x=>x.id===id);if(!l)return;
-  const ta=document.getElementById('notes-'+id);
-  if(!ta)return;
+  const ta=document.getElementById('notes-'+id);if(!ta)return;
   l.notes=ta.value;
-  const saved=document.getElementById('notes-saved-'+id);
-  if(saved){saved.classList.add('show');setTimeout(()=>saved.classList.remove('show'),2000);}
-  // Update log doc description if we have it
-  // (simplified: just store in memory; full implementation would update Drive doc)
+  clearTimeout(notesTimers[id]);
+  notesTimers[id]=setTimeout(async()=>{
+    await updateLogDoc(l);
+    const saved=document.getElementById('notes-saved-'+id);
+    if(saved){saved.classList.add('show');setTimeout(()=>saved.classList.remove('show'),2000);}
+  },1200);
+}
+
+// ── SEARCH ─────────────────────────────────────────────────────────
+function handleSearch(val){
+  searchQ=val.trim().toLowerCase();
+  document.getElementById('searchClear').classList.toggle('show',!!searchQ);
+  renderList();
+}
+function clearSearch(){
+  searchQ='';
+  document.getElementById('searchInput').value='';
+  document.getElementById('searchClear').classList.remove('show');
+  document.getElementById('searchCount').style.display='none';
+  renderList();
+}
+function matchesSearch(l){
+  if(!searchQ)return true;
+  return [l.sender,l.subject,l.summary,l.ref,l.iban,l.payRef,l.notes,l.keyDetails,l.amount,l.filename]
+    .some(v=>v&&String(v).toLowerCase().includes(searchQ));
+}
+function highlight(str){
+  if(!searchQ||!str)return x(str||'');
+  const safe=x(str);
+  const re=new RegExp('('+searchQ.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','gi');
+  return safe.replace(re,'<span class="hi">$1</span>');
 }
 
 // ── RENDER ─────────────────────────────────────────────────────────
 function renderList(){
   const filtered=letters.filter(l=>
     (activeCo==='ALL'||l.company===activeCo)&&
-    (activeSt==='ALL'||l.status===activeSt)
+    (activeSt==='ALL'||l.status===activeSt)&&
+    matchesSearch(l)
   );
+  const countEl=document.getElementById('searchCount');
+  if(searchQ){
+    countEl.style.display='block';
+    countEl.textContent=`${filtered.length} result${filtered.length!==1?'s':''}`;
+  } else {countEl.style.display='none';}
+
   const el=document.getElementById('letterList');
-  if(!filtered.length){el.innerHTML=`<div style="padding:1.25rem;text-align:center;font-family:var(--sans);font-size:12px;color:var(--muted)">No letters</div>`;return;}
+  if(!filtered.length){
+    el.innerHTML=`<div style="padding:1.25rem;text-align:center;font-family:var(--sans);font-size:12px;color:var(--muted)">${searchQ?'No results':'No letters'}</div>`;return;
+  }
   el.innerHTML=filtered.map(l=>{
     const sc=S_MAIN[l.status]||S_MAIN.FILED;
     return `<div class="lcard ${activeId===l.id?'on':''}" onclick="selectLetter('${l.id}')">
-      <div class="lc-row"><div class="lc-sender">${x(l.sender)}</div><div class="lc-date">${fd(l.date)}</div></div>
-      <div class="lc-subj">${x(l.subject)}</div>
+      <div class="lc-row"><div class="lc-sender">${highlight(l.sender)}</div><div class="lc-date">${fd(l.date)}</div></div>
+      <div class="lc-subj">${highlight(l.subject)}</div>
       <div class="lc-badges">
         <span class="badge" style="background:#f1f0ee;color:var(--muted)">${l.company}</span>
         <span class="badge" style="background:${sc.bg};color:${sc.color}">${sc.label}</span>
         ${l.paidDate?`<span class="badge" style="background:var(--green-bg);color:var(--green)">paid ${fd(l.paidDate)}</span>`:''}
-        ${l.manualOverride?`<span class="badge" style="background:#ede8e1;color:var(--muted)">manual</span>`:''}
+        ${l.notes?`<span class="badge" style="background:#f1f0ee;color:var(--muted)">note</span>`:''}
       </div>
     </div>`;
   }).join('');
@@ -572,24 +724,10 @@ function renderDetail(l){
       <span class="badge" style="background:${rs.bg};color:${rs.color}">${rs.label}</span></div>`;}).join('')
   }</div>`:'';
 
-  // Payment info card (only if IBAN or payRef present)
-  const payHtml=(l.iban||l.payRef)?`
-    <div class="pay-grid">
-      ${l.iban?`<div class="pay-card">
-        <div class="pay-label">IBAN</div>
-        <div class="pay-val"><span>${x(l.iban)}</span><button class="copy-btn" onclick="copyText('${x(l.iban)}')">Copy</button></div>
-      </div>`:''}
-      ${l.payRef?`<div class="pay-card">
-        <div class="pay-label">Payment Reference</div>
-        <div class="pay-val"><span>${x(l.payRef)}</span><button class="copy-btn" onclick="copyText('${x(l.payRef)}')">Copy</button></div>
-      </div>`:''}
-    </div>`:'';
-
-  // PDF preview — use Drive's built-in viewer
-  const previewUrl=`https://drive.google.com/file/d/${l.id}/preview`;
-  const preview=`<div class="scard"><div class="sec-label">Preview</div>
-    <iframe src="${previewUrl}" class="preview-frame" allow="autoplay" loading="lazy"></iframe>
-  </div>`;
+  const payHtml=(l.iban||l.payRef)?`<div class="pay-grid">
+    ${l.iban?`<div class="pay-card"><div class="pay-label">IBAN</div><div class="pay-val"><span>${x(l.iban)}</span><button class="copy-btn" onclick="copyText('${l.iban.replace(/'/g,"\\'")}')">Copy</button></div></div>`:''}
+    ${l.payRef?`<div class="pay-card"><div class="pay-label">Payment Reference</div><div class="pay-val"><span>${x(l.payRef)}</span><button class="copy-btn" onclick="copyText('${l.payRef.replace(/'/g,"\\'")}')">Copy</button></div></div>`:''}
+  </div>`:'';
 
   document.getElementById('content').innerHTML=`<div class="detail">
     <div class="d-header">
@@ -619,15 +757,19 @@ function renderDetail(l){
 
     <div class="scard">
       <div class="sec-label">Notes</div>
-      <textarea class="notes-area" id="notes-${l.id}" placeholder="Add notes here…" onchange="saveNotes('${l.id}')" oninput="saveNotes('${l.id}')">${x(l.notes||'')}</textarea>
+      <textarea class="notes-area" id="notes-${l.id}" placeholder="Add notes…" oninput="handleNotes('${l.id}')">${x(l.notes||'')}</textarea>
       <div class="notes-footer">
-        <span class="notes-hint">Auto-saved</span>
+        <span class="notes-hint">Auto-saved to Drive</span>
         <span class="notes-saved" id="notes-saved-${l.id}">✓ Saved</span>
       </div>
     </div>
 
     ${rel}
-    ${preview}
+
+    <div class="scard">
+      <div class="sec-label">Preview</div>
+      <iframe src="https://drive.google.com/file/d/${l.id}/preview" class="preview-frame" allow="autoplay" loading="lazy"></iframe>
+    </div>
 
     <div class="scard"><div class="sec-label">Drive</div>
       <a class="btn" href="${l.driveLink}" target="_blank">
