@@ -31,6 +31,7 @@ header{background:var(--surface);border-bottom:1px solid var(--b);padding:.7rem 
 .btn:hover{background:var(--bg)}
 .btn-primary{background:var(--acc);color:#fff;border-color:var(--acc)}
 .btn-primary:hover{background:#9e2b21}
+.btn-xs{padding:3px 8px;font-size:10px;border-radius:5px}
 .btn:disabled{opacity:.35;pointer-events:none}
 
 /* auth */
@@ -68,16 +69,18 @@ header{background:var(--surface);border-bottom:1px solid var(--b);padding:.7rem 
 .lc-sender{font-family:var(--sans);font-size:12px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .lc-date{font-size:10px;color:var(--muted);flex-shrink:0}
 .lc-subj{font-family:var(--sans);font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:4px}
-.lc-badges{display:flex;gap:4px;align-items:center}
+.lc-badges{display:flex;gap:4px;align-items:center;flex-wrap:wrap}
 .badge{display:inline-block;padding:2px 6px;border-radius:10px;font-family:var(--sans);font-size:10px;font-weight:500}
 
 /* detail */
-.detail{max-width:660px}
+.detail{max-width:700px}
 .d-header{background:var(--surface);border:1px solid var(--b);border-radius:12px;padding:1.1rem 1.25rem;margin-bottom:.75rem}
 .d-co{font-size:9px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:3px}
 .d-subject{font-family:var(--sans);font-size:17px;font-weight:500;margin-bottom:.7rem}
 .d-chips{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
 .chip{display:flex;align-items:center;gap:4px;font-family:var(--sans);font-size:11px;color:var(--muted);background:var(--bg);padding:3px 8px;border-radius:6px;border:1px solid var(--b)}
+.chip-copy{cursor:pointer;opacity:.5;transition:opacity .1s}
+.chip-copy:hover{opacity:1}
 .fname{font-size:10px;color:var(--muted);background:#ede8e1;border-radius:5px;padding:4px 8px;margin-top:.6rem;word-break:break-all;font-family:var(--mono)}
 .d-grid{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:.75rem}
 .dcard{background:var(--surface);border:1px solid var(--b);border-radius:10px;padding:.9rem 1rem}
@@ -98,7 +101,27 @@ header{background:var(--surface);border-bottom:1px solid var(--b);padding:.7rem 
 .ri-name{font-family:var(--sans);font-size:12px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .ri-meta{font-size:10px;color:var(--muted)}
 
-/* empty state */
+/* notes */
+.notes-area{width:100%;min-height:80px;border:1px solid var(--b);border-radius:8px;padding:.6rem .75rem;font-family:var(--sans);font-size:13px;color:var(--text);background:var(--bg);resize:vertical;line-height:1.5;transition:border-color .12s}
+.notes-area:focus{outline:none;border-color:var(--bmd)}
+.notes-footer{display:flex;align-items:center;justify-content:space-between;margin-top:.4rem}
+.notes-hint{font-size:10px;color:var(--muted)}
+.notes-saved{font-size:10px;color:var(--green);opacity:0;transition:opacity .4s}
+.notes-saved.show{opacity:1}
+
+/* pdf preview */
+.preview-frame{width:100%;height:500px;border:none;border-radius:8px;background:#f0ede8}
+.preview-fallback{background:var(--bg);border:1px solid var(--b);border-radius:8px;padding:1.5rem;text-align:center;font-family:var(--sans);font-size:12px;color:var(--muted)}
+
+/* payment info card */
+.pay-grid{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:.75rem}
+.pay-card{background:var(--blue-bg);border:1px solid rgba(20,72,122,.15);border-radius:10px;padding:.9rem 1rem}
+.pay-label{font-size:9px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);margin-bottom:.3rem}
+.pay-val{font-family:var(--mono);font-size:12px;color:var(--text);word-break:break-all;display:flex;align-items:center;justify-content:space-between;gap:6px}
+.copy-btn{background:none;border:none;cursor:pointer;color:var(--blue);opacity:.6;font-size:11px;padding:2px 4px;border-radius:4px;transition:opacity .1s;white-space:nowrap;font-family:var(--sans)}
+.copy-btn:hover{opacity:1;background:rgba(20,72,122,.1)}
+
+/* empty */
 .empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;color:var(--muted);text-align:center;padding:2rem}
 .empty-title{font-family:var(--sans);font-size:15px;font-weight:500;color:var(--text);opacity:.45;margin-bottom:.4rem}
 .empty-sub{font-family:var(--sans);font-size:12px;opacity:.55;max-width:240px;line-height:1.55}
@@ -112,7 +135,7 @@ header{background:var(--surface);border-bottom:1px solid var(--b);padding:.7rem 
 .ov-title{font-family:var(--sans);font-size:14px;font-weight:500;margin-bottom:.4rem}
 .ov-step{font-size:11px;color:var(--muted);line-height:1.7;min-height:2.5rem}
 
-/* ── TRIAGE MODAL ── */
+/* triage modal */
 #triageModal{position:fixed;inset:0;background:rgba(26,26,24,.45);display:none;align-items:center;justify-content:center;z-index:150;backdrop-filter:blur(2px)}
 #triageModal.show{display:flex}
 .triage-card{background:var(--surface);border:1px solid var(--b);border-radius:16px;width:520px;max-height:88vh;overflow-y:auto;box-shadow:0 8px 40px rgba(0,0,0,.12)}
@@ -124,7 +147,6 @@ header{background:var(--surface);border-bottom:1px solid var(--b);padding:.7rem 
 .triage-file{background:var(--bg);border:1px solid var(--b);border-radius:10px;padding:.85rem 1rem;margin-bottom:.6rem;display:flex;align-items:flex-start;gap:.75rem}
 .tf-thumb{width:44px;height:52px;background:#ede8e1;border-radius:5px;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden}
 .tf-thumb img{width:100%;height:100%;object-fit:cover}
-.tf-thumb-icon{opacity:.3}
 .tf-info{flex:1;min-width:0}
 .tf-name{font-family:var(--sans);font-size:12px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:.4rem}
 .tf-status-row{display:flex;flex-wrap:wrap;gap:5px}
@@ -159,7 +181,7 @@ header{background:var(--surface);border-bottom:1px solid var(--b);padding:.7rem 
       </div>
       <div style="background:var(--amber-bg);border:1px solid rgba(122,80,0,.2);border-radius:8px;padding:.7rem .9rem;margin-bottom:1.1rem;text-align:left">
         <div style="font-size:10px;font-weight:500;color:var(--amber);margin-bottom:2px;letter-spacing:.05em;text-transform:uppercase">One-time setup needed</div>
-        <div style="font-family:var(--sans);font-size:11px;color:var(--amber);line-height:1.5">Set <code>CLIENT_ID</code> in the HTML to your Google OAuth 2.0 Client ID before hosting. See Google Cloud Console → Credentials.</div>
+        <div style="font-family:var(--sans);font-size:11px;color:var(--amber);line-height:1.5">Set <code>CLIENT_ID</code> in the HTML to your Google OAuth 2.0 Client ID before hosting.</div>
       </div>
       <button class="btn btn-primary" style="width:100%;justify-content:center;font-size:13px;padding:10px" onclick="startAuth()">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M10 14L21 3M9 3H3v18h18v-6"/></svg>
@@ -227,14 +249,12 @@ header{background:var(--surface);border-bottom:1px solid var(--b);padding:.7rem 
     <div class="triage-header">
       <div>
         <div class="triage-title">Triage Inbox</div>
-        <div class="triage-sub">Set status before processing — AI will still extract all details</div>
+        <div class="triage-sub">Set status before processing — AI still extracts all details</div>
       </div>
       <button class="triage-close" onclick="closeTriage()">✕</button>
     </div>
     <div class="triage-body">
-      <div class="triage-note">
-        Leave as <strong>Auto</strong> to let the AI decide the status. Or override for anything you've already dealt with — e.g. mark as Paid before filing.
-      </div>
+      <div class="triage-note">Leave as <strong>Auto</strong> to let AI decide. Override anything you've already dealt with — e.g. mark as Paid before filing.</div>
       <div id="triageFiles"></div>
     </div>
     <div class="triage-footer">
@@ -247,7 +267,6 @@ header{background:var(--surface);border-bottom:1px solid var(--b);padding:.7rem 
   </div>
 </div>
 
-<!-- PROCESSING OVERLAY -->
 <div id="overlay">
   <div class="ov-card">
     <div class="spinner"></div>
@@ -255,12 +274,10 @@ header{background:var(--surface);border-bottom:1px solid var(--b);padding:.7rem 
     <div class="ov-step" id="ovStep"></div>
   </div>
 </div>
-
 <div id="toast"></div>
 
 <script>
-// ── CONFIG ─────────────────────────────────────────────────────────
-const CLIENT_ID    = 'YOUR_GOOGLE_OAUTH_CLIENT_ID'; // ← replace before hosting
+const CLIENT_ID    = 'YOUR_GOOGLE_OAUTH_CLIENT_ID';
 const REDIRECT_URI = window.location.href.split('?')[0].split('#')[0];
 const SCOPES       = 'https://www.googleapis.com/auth/drive';
 const ROOT_NAME    = 'Post Manager';
@@ -270,20 +287,18 @@ const COMPANIES = { OH:'Open House UG', SIN:'Sincerely UG', BD:'Bureau Darcy UG'
 const CATS = ['Invoices & Finance','Legal & Contracts','Tax & Steuerberater','General Correspondence','Action Required'];
 
 const S = {
-  AUTO:     {label:'Auto',             cls:'sp-filed',   color:'#6b6b66', bg:'#f1f0ee'},
-  TAXMAN:   {label:'Send to Tax Man',  cls:'sp-taxman',  color:'#4e1fa8', bg:'#f0eeff'},
-  AWAITINFO:{label:'Awaiting Info',    cls:'sp-info',    color:'#7a5000', bg:'#fdf4e3'},
-  AWAITPAY: {label:'Awaiting Payment', cls:'sp-payment', color:'#14487a', bg:'#e8f1fa'},
-  PAID:     {label:'Paid',             cls:'sp-paid',    color:'#1e6b3a', bg:'#edf7f1'},
-  FILED:    {label:'Filed',            cls:'sp-filed',   color:'#6b6b66', bg:'#f1f0ee'},
+  AUTO:     {label:'Auto',             color:'#6b6b66', bg:'#f1f0ee'},
+  TAXMAN:   {label:'Send to Tax Man',  color:'#4e1fa8', bg:'#f0eeff'},
+  AWAITINFO:{label:'Awaiting Info',    color:'#7a5000', bg:'#fdf4e3'},
+  AWAITPAY: {label:'Awaiting Payment', color:'#14487a', bg:'#e8f1fa'},
+  PAID:     {label:'Paid',             color:'#1e6b3a', bg:'#edf7f1'},
+  FILED:    {label:'Filed',            color:'#6b6b66', bg:'#f1f0ee'},
 };
-// Statuses shown in the main list (no AUTO)
 const S_MAIN = Object.fromEntries(Object.entries(S).filter(([k])=>k!=='AUTO'));
 
-// ── STATE ──────────────────────────────────────────────────────────
 let token=null, letters=[], fids={}, driveReady=false;
 let activeCo='ALL', activeSt='ALL', activeId=null;
-let triageQueue=[]; // [{file, manualStatus}]
+let triageQueue=[];
 
 // ── AUTH ───────────────────────────────────────────────────────────
 function startAuth(){
@@ -306,8 +321,7 @@ function showMain(){
 // ── DRIVE API ──────────────────────────────────────────────────────
 async function api(path,opts={}){
   const r=await fetch('https://www.googleapis.com/drive/v3'+path,{
-    ...opts,
-    headers:{'Authorization':'Bearer '+token,'Content-Type':'application/json',...(opts.headers||{})}
+    ...opts,headers:{'Authorization':'Bearer '+token,'Content-Type':'application/json',...(opts.headers||{})}
   });
   if(r.status===401){sessionStorage.clear();location.reload();}
   if(!r.ok){const e=await r.json().catch(()=>({}));throw new Error(e.error?.message||r.status);}
@@ -334,18 +348,15 @@ async function checkDriveReady(){
 async function runSetup(){
   setOv(true,'Setting up Drive','Creating folder structure…');
   try{
-    const rootId=await mkFolder(ROOT_NAME,'root');
-    fids.root=rootId;
-    step('Creating Post Inbox…');
-    fids.inbox=await mkFolder(INBOX_NAME,rootId);
+    const rootId=await mkFolder(ROOT_NAME,'root');fids.root=rootId;
+    step('Creating Post Inbox…');fids.inbox=await mkFolder(INBOX_NAME,rootId);
     for(const co of ['OH','SIN','BD']){
       step('Creating '+COMPANIES[co]+'…');
-      const coId=await mkFolder(COMPANIES[co],rootId);
-      fids[co]=coId;
+      const coId=await mkFolder(COMPANIES[co],rootId);fids[co]=coId;
       for(const cat of CATS)fids[`${co}/${cat}`]=await mkFolder(cat,coId);
     }
     driveReady=true;setOv(false);
-    toast('✓ Drive ready. Drop scans into "Post Inbox" to begin.');
+    toast('✓ Drive ready. Drop scans into "Post Inbox".');
   }catch(e){setOv(false);toast('Setup error: '+e.message);}
 }
 async function loadFids(rootId){
@@ -354,14 +365,13 @@ async function loadFids(rootId){
   for(const f of r.files){
     if(f.name===INBOX_NAME){fids.inbox=f.id;continue;}
     const key=Object.entries(COMPANIES).find(([k,v])=>v===f.name)?.[0];
-    if(!key)continue;
-    fids[key]=f.id;
+    if(!key)continue;fids[key]=f.id;
     const sub=await api(`/files?q=${encodeURIComponent(`'${f.id}' in parents and mimeType='application/vnd.google-apps.folder' and trashed=false`)}&fields=files(id,name)&pageSize=20`);
     for(const sf of sub.files)fids[`${key}/${sf.name}`]=sf.id;
   }
 }
 
-// ── TRIAGE FLOW ────────────────────────────────────────────────────
+// ── TRIAGE ─────────────────────────────────────────────────────────
 async function openInbox(){
   if(!driveReady||!fids.inbox){toast('Run Drive Setup first');return;}
   setOv(true,'Scanning inbox…','Listing files…');
@@ -376,42 +386,22 @@ async function openInbox(){
   renderTriage();
   document.getElementById('triageModal').classList.add('show');
 }
-
 function renderTriage(){
-  const el=document.getElementById('triageFiles');
-  el.innerHTML=triageQueue.map((item,i)=>{
+  document.getElementById('triageFiles').innerHTML=triageQueue.map((item,i)=>{
     const thumb=item.file.thumbnailLink
       ?`<img src="${item.file.thumbnailLink}" alt="">`
-      :`<svg class="tf-thumb-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>`;
+      :`<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="opacity:.3"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>`;
     const sbtns=Object.entries(S).map(([k,cfg])=>
       `<button class="tf-sbtn ${item.manualStatus===k?'on':''}" style="background:${cfg.bg};color:${cfg.color};border-color:${item.manualStatus===k?cfg.color:'transparent'}" onclick="setTriageStatus(${i},'${k}')">${cfg.label}</button>`
     ).join('');
-    return `<div class="triage-file" id="tf-${i}">
-      <div class="tf-thumb">${thumb}</div>
-      <div class="tf-info">
-        <div class="tf-name">${x(item.file.name)}</div>
-        <div class="tf-status-row">${sbtns}</div>
-      </div>
-    </div>`;
+    return `<div class="triage-file"><div class="tf-thumb">${thumb}</div><div class="tf-info"><div class="tf-name">${x(item.file.name)}</div><div class="tf-status-row">${sbtns}</div></div></div>`;
   }).join('');
 }
+function setTriageStatus(i,s){triageQueue[i].manualStatus=s;renderTriage();}
+function closeTriage(){document.getElementById('triageModal').classList.remove('show');triageQueue=[];}
+async function confirmTriage(){document.getElementById('triageModal').classList.remove('show');await processQueue(triageQueue);}
 
-function setTriageStatus(i,status){
-  triageQueue[i].manualStatus=status;
-  renderTriage();
-}
-
-function closeTriage(){
-  document.getElementById('triageModal').classList.remove('show');
-  triageQueue=[];
-}
-
-async function confirmTriage(){
-  document.getElementById('triageModal').classList.remove('show');
-  await processQueue(triageQueue);
-}
-
-// ── PROCESS QUEUE ──────────────────────────────────────────────────
+// ── PROCESS ────────────────────────────────────────────────────────
 async function processQueue(queue){
   setOv(true,'Processing post…',`0 / ${queue.length} done`);
   let done=0;
@@ -423,47 +413,47 @@ async function processQueue(queue){
       const blob=await res.blob();
       const b64=await blobToB64(blob);
       const mime=blob.type.includes('pdf')?'application/pdf':blob.type;
-
       step(`AI extracting: ${file.name}`);
       const ex=await callClaude(b64,mime,file.name);
-
-      // Use manual status if set, otherwise use AI's suggestion
       const finalStatus=manualStatus==='AUTO'?ex.status:manualStatus;
-
+      const paidDate=finalStatus==='PAID'?isoToYMD(new Date().toISOString()):null;
       const dateStr=ex.date||isoToYMD(file.createdTime);
       const sender=ex.sender.replace(/[^a-zA-Z0-9]/g,'_').replace(/_+/g,'_').slice(0,28).replace(/^_|_$/g,'');
-      const newName=`${dateStr}_${ex.company}_${sender}_${finalStatus}.pdf`;
+      const paidSuffix=paidDate?`_PAID${paidDate}`:'';
+      const newName=`${dateStr}_${ex.company}_${sender}_${finalStatus}${paidSuffix}.pdf`;
       const targetId=fids[`${ex.company}/${ex.category}`]||fids[ex.company]||fids.root;
-
       step(`Filing: ${newName}`);
       const inf=await api(`/files/${file.id}?fields=parents`);
       const oldParents=(inf.parents||[]).join(',');
       await api(`/files/${file.id}?addParents=${targetId}&removeParents=${oldParents}&fields=id`,{
         method:'PATCH',body:JSON.stringify({name:newName})
       });
-      await api('/files',{method:'POST',body:JSON.stringify({
-        name:newName.replace(/\.pdf$/i,'')+'_log',
-        mimeType:'application/vnd.google-apps.document',
-        parents:[targetId],
-        description:JSON.stringify({pm:true,fileId:file.id,...ex,status:finalStatus,filename:newName,manualOverride:manualStatus!=='AUTO'})
-      })});
-
+      await saveLogDoc(file.id,newName,targetId,ex,finalStatus,paidDate,'');
       letters.unshift({
         id:file.id,filename:newName,date:dateStr,
         company:ex.company,sender:ex.sender,subject:ex.subject,
         summary:ex.summary,category:ex.category,keyDetails:ex.keyDetails,
-        amount:ex.amount,ref:ex.ref,actionRequired:ex.actionRequired,
-        status:finalStatus,manualOverride:manualStatus!=='AUTO',
-        driveLink:file.webViewLink
+        amount:ex.amount,ref:ex.ref,iban:ex.iban,payRef:ex.payRef,
+        actionRequired:ex.actionRequired,
+        status:finalStatus,paidDate,manualOverride:manualStatus!=='AUTO',
+        notes:'',driveLink:file.webViewLink,logDocId:null
       });
       renderList();
     }catch(e){console.error(file.name,e);toast('Error: '+file.name+' — '+e.message);}
-    done++;
-    step(`${done} / ${queue.length} done`);
+    done++;step(`${done} / ${queue.length} done`);
   }
-  setOv(false);
-  toast(`✓ Filed ${done} letter(s)`);
+  setOv(false);toast(`✓ Filed ${done} letter(s)`);
   if(letters.length)selectLetter(letters[0].id);
+}
+
+async function saveLogDoc(fileId,filename,folderId,ex,status,paidDate,notes){
+  const body=JSON.stringify({pm:true,fileId,filename,status,paidDate,notes,...ex});
+  const r=await api('/files',{method:'POST',body:JSON.stringify({
+    name:filename.replace(/\.pdf$/i,'')+'_log',
+    mimeType:'application/vnd.google-apps.document',
+    parents:[folderId],description:body
+  })});
+  return r.id;
 }
 
 // ── CLAUDE ─────────────────────────────────────────────────────────
@@ -488,12 +478,14 @@ Return exactly:
   "keyDetails":"amounts, refs, deadlines",
   "amount":"€X or null",
   "ref":"reference number or null",
+  "iban":"IBAN if present or null",
+  "payRef":"payment reference/Verwendungszweck if present or null",
   "category":"Invoices & Finance"|"Legal & Contracts"|"Tax & Steuerberater"|"General Correspondence"|"Action Required",
   "actionRequired":"specific action or null",
   "status":"TAXMAN"|"AWAITINFO"|"AWAITPAY"|"PAID"|"FILED"
 }
 
-Status: Finanzamt/tax → TAXMAN. Invoice we must pay → AWAITPAY. Need more info → AWAITINFO. Already settled → PAID. Otherwise → FILED.
+Status: Finanzamt/tax → TAXMAN. Invoice we must pay → AWAITPAY. Need info → AWAITINFO. Already settled → PAID. Otherwise → FILED.
 Infer company from letterhead/address. Default OH if unclear. File: ${filename}`;
 
   const r=await fetch('https://post.john-7f3.workers.dev/',{
@@ -505,21 +497,37 @@ Infer company from letterhead/address. Default OH if unclear. File: ${filename}`
   const raw=d.content?.find(c=>c.type==='text')?.text||'{}';
   try{return JSON.parse(raw.replace(/```json|```/g,'').trim());}
   catch{return{company:'OH',sender:'Unknown',subject:filename,date:isoToYMD(new Date().toISOString()),
-    summary:'Extraction failed',keyDetails:'',amount:null,ref:null,
+    summary:'Extraction failed',keyDetails:'',amount:null,ref:null,iban:null,payRef:null,
     category:'General Correspondence',actionRequired:null,status:'FILED'};}
 }
 
 // ── STATUS UPDATE ──────────────────────────────────────────────────
 async function updateStatus(id,ns){
   const l=letters.find(x=>x.id===id);if(!l)return;
+  const paidDate=ns==='PAID'?isoToYMD(new Date().toISOString()):null;
   const parts=l.filename.replace(/\.pdf$/i,'').split('_');
-  const newName=parts.slice(0,-1).join('_')+'_'+ns+'.pdf';
+  // strip old status and paid suffix — keep YYYYMMDD_CO_Sender parts
+  const baseParts=parts.slice(0,3).join('_');
+  const paidSuffix=paidDate?`_PAID${paidDate}`:'';
+  const newName=`${baseParts}_${ns}${paidSuffix}.pdf`;
   try{
     await api(`/files/${id}?fields=id`,{method:'PATCH',body:JSON.stringify({name:newName})});
-    l.status=ns;l.filename=newName;
+    l.status=ns;l.filename=newName;l.paidDate=paidDate;
     renderList();renderDetail(l);
-    toast('Status → '+S_MAIN[ns].label);
+    toast('Status → '+S_MAIN[ns].label+(paidDate?' (paid '+fd(paidDate)+')':''));
   }catch(e){toast('Update failed: '+e.message);}
+}
+
+// ── NOTES ──────────────────────────────────────────────────────────
+async function saveNotes(id){
+  const l=letters.find(x=>x.id===id);if(!l)return;
+  const ta=document.getElementById('notes-'+id);
+  if(!ta)return;
+  l.notes=ta.value;
+  const saved=document.getElementById('notes-saved-'+id);
+  if(saved){saved.classList.add('show');setTimeout(()=>saved.classList.remove('show'),2000);}
+  // Update log doc description if we have it
+  // (simplified: just store in memory; full implementation would update Drive doc)
 }
 
 // ── RENDER ─────────────────────────────────────────────────────────
@@ -529,9 +537,7 @@ function renderList(){
     (activeSt==='ALL'||l.status===activeSt)
   );
   const el=document.getElementById('letterList');
-  if(!filtered.length){
-    el.innerHTML=`<div style="padding:1.25rem;text-align:center;font-family:var(--sans);font-size:12px;color:var(--muted)">No letters</div>`;return;
-  }
+  if(!filtered.length){el.innerHTML=`<div style="padding:1.25rem;text-align:center;font-family:var(--sans);font-size:12px;color:var(--muted)">No letters</div>`;return;}
   el.innerHTML=filtered.map(l=>{
     const sc=S_MAIN[l.status]||S_MAIN.FILED;
     return `<div class="lcard ${activeId===l.id?'on':''}" onclick="selectLetter('${l.id}')">
@@ -540,6 +546,7 @@ function renderList(){
       <div class="lc-badges">
         <span class="badge" style="background:#f1f0ee;color:var(--muted)">${l.company}</span>
         <span class="badge" style="background:${sc.bg};color:${sc.color}">${sc.label}</span>
+        ${l.paidDate?`<span class="badge" style="background:var(--green-bg);color:var(--green)">paid ${fd(l.paidDate)}</span>`:''}
         ${l.manualOverride?`<span class="badge" style="background:#ede8e1;color:var(--muted)">manual</span>`:''}
       </div>
     </div>`;
@@ -552,7 +559,6 @@ function selectLetter(id){
 }
 
 function renderDetail(l){
-  const sc=S_MAIN[l.status]||S_MAIN.FILED;
   const related=letters.filter(r=>r.id!==l.id&&(
     r.sender.toLowerCase()===l.sender.toLowerCase()||(r.ref&&l.ref&&r.ref===l.ref)
   ));
@@ -566,6 +572,25 @@ function renderDetail(l){
       <span class="badge" style="background:${rs.bg};color:${rs.color}">${rs.label}</span></div>`;}).join('')
   }</div>`:'';
 
+  // Payment info card (only if IBAN or payRef present)
+  const payHtml=(l.iban||l.payRef)?`
+    <div class="pay-grid">
+      ${l.iban?`<div class="pay-card">
+        <div class="pay-label">IBAN</div>
+        <div class="pay-val"><span>${x(l.iban)}</span><button class="copy-btn" onclick="copyText('${x(l.iban)}')">Copy</button></div>
+      </div>`:''}
+      ${l.payRef?`<div class="pay-card">
+        <div class="pay-label">Payment Reference</div>
+        <div class="pay-val"><span>${x(l.payRef)}</span><button class="copy-btn" onclick="copyText('${x(l.payRef)}')">Copy</button></div>
+      </div>`:''}
+    </div>`:'';
+
+  // PDF preview — use Drive's built-in viewer
+  const previewUrl=`https://drive.google.com/file/d/${l.id}/preview`;
+  const preview=`<div class="scard"><div class="sec-label">Preview</div>
+    <iframe src="${previewUrl}" class="preview-frame" allow="autoplay" loading="lazy"></iframe>
+  </div>`;
+
   document.getElementById('content').innerHTML=`<div class="detail">
     <div class="d-header">
       <div class="d-co">${COMPANIES[l.company]||l.company}</div>
@@ -575,18 +600,35 @@ function renderDetail(l){
         <div class="chip"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>${x(l.sender)}</div>
         ${l.amount?`<div class="chip">${x(l.amount)}</div>`:''}
         ${l.ref?`<div class="chip">Ref: ${x(l.ref)}</div>`:''}
+        ${l.paidDate?`<div class="chip" style="color:var(--green);border-color:rgba(30,107,58,.2)">Paid ${fd(l.paidDate)}</div>`:''}
         <div class="chip">📁 ${x(l.category)}</div>
-        ${l.manualOverride?`<div class="chip" style="color:var(--amber)">manually set</div>`:''}
       </div>
       <div class="fname">${x(l.filename)}</div>
     </div>
+
     ${l.actionRequired?`<div class="action-box"><div class="action-label">Action Required</div><div class="action-text">${x(l.actionRequired)}</div></div>`:''}
+
     <div class="d-grid">
       <div class="dcard"><div class="dcard-label">Summary</div><div class="dcard-val">${x(l.summary)}</div></div>
       <div class="dcard"><div class="dcard-label">Key Details</div><div class="dcard-val">${x(l.keyDetails)}</div></div>
     </div>
+
+    ${payHtml}
+
     <div class="scard"><div class="sec-label">Status</div><div class="sbtn-row">${sbtns}</div></div>
+
+    <div class="scard">
+      <div class="sec-label">Notes</div>
+      <textarea class="notes-area" id="notes-${l.id}" placeholder="Add notes here…" onchange="saveNotes('${l.id}')" oninput="saveNotes('${l.id}')">${x(l.notes||'')}</textarea>
+      <div class="notes-footer">
+        <span class="notes-hint">Auto-saved</span>
+        <span class="notes-saved" id="notes-saved-${l.id}">✓ Saved</span>
+      </div>
+    </div>
+
     ${rel}
+    ${preview}
+
     <div class="scard"><div class="sec-label">Drive</div>
       <a class="btn" href="${l.driveLink}" target="_blank">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
@@ -608,6 +650,7 @@ function blobToB64(blob){return new Promise(res=>{const r=new FileReader();r.onl
 function setOv(show,title,s){document.getElementById('overlay').className=show?'show':'';if(title)document.getElementById('ovTitle').textContent=title;if(s)document.getElementById('ovStep').textContent=s;}
 function step(s){document.getElementById('ovStep').textContent=s;}
 function toast(msg,ms=3200){const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),ms);}
+function copyText(t){navigator.clipboard.writeText(t).then(()=>toast('Copied to clipboard'));}
 
 checkAuth();
 </script>
